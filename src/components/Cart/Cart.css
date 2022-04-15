@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+
+.app {
+  position: sticky;
+  top: 150px;
+  margin-top: 0.6rem;
+  margin-left: 1rem;
+  font-family: "Open Sans", sans-serif;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid rgb(105, 105, 105);
+  width: 170px;
+  min-height: 200px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-shadow: 6px 11px 23px 0px rgba(0, 0, 0, 0.3);
+}
+
+.top {
+  background: rgba(0, 0, 0, 0);
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  height: 5em;
+  width: 100%;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  border-radius: 20px 20px 0px 0px;
+}
+.section-title {
+  max-width: 200px;
+  width: 100%;
+}
+.section-title h2::after {
+  content: "";
+  border: 1px solid rgb(105, 105, 105);
+  display: flex;
+  max-width: 200px;
+}
+
+.top .price {
+  text-align: right;
+  color: #ccc;
+}
+
+.top .price-title {
+  color: #ccc;
+  font-weight: 600;
+}
+
+.top .price-amount {
+  margin-top: 5px;
+  font-weight: 700;
+}
+
+.cart-list {
+  font-family: "Open Sans";
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cart-list .cart-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cart-list .cart-item img {
+  width: 100px;
+  border-radius: 5px;
+}
+
+.cart-list .cart-item .item-info {
+  text-align: right;
+}
+
+.cart-list .cart-item .item-info .price-amount {
+  color: #424242;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.navigate {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.navigate .button {
+  font-family: "Open Sans", sans-serif;
+  padding: 5px 5px;
+  border: 0;
+}
+
+.navigate .button-back {
+  width: 50px;
+  font-size: 24px;
+  color: #dedede;
+}
+
+.navigate .button-pay {
+  margin: 5px;
+  background: red;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 600;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+/*# sourceMappingURL=Cart.css.map */

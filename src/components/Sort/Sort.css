@@ -1,0 +1,9 @@
+.sort-section {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.sort-section__text {
+  color: white;
+}

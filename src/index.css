@@ -1,13 +1,60 @@
-body {
+* {
+  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* carousel pagination start  */
+.krmNah {
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  width: 500px !important;
+  height: 4px !important;
+  margin: 0px !important;
+  background-color: red !important;
 }
+
+.jhmYzC {
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  width: 500px !important;
+  height: 4px !important;
+  margin: 0px !important;
+}
+
+.kdCslO {
+  margin-top: 40px !important;
+  width: 100% !important;
+  background-color: white !important;
+  height: 4px !important;
+  background-color: rgb(65, 60, 60) !important;
+}
+/* carousel pagination ends  */
+
+/* carousel arrow  start*/
+
+.eAyARa {
+  background-color: transparent !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+
+.eWjCzc {
+  background-color: transparent !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+
+.eAyARa:hover {
+  background-color: transparent !important;
+  color: rgb(255, 0, 0) !important;
+  box-shadow: none !important;
+}
+
+.eWjCzc:hover {
+  background-color: transparent !important;
+  color: rgb(255, 0, 0) !important;
+  box-shadow: none !important;
+}
+
+/* carousel arrow  end*/

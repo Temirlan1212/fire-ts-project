@@ -1,0 +1,41 @@
+.Slider_Item {
+  width: 80px;
+  height: 80px;
+  margin-top: 40px;
+  background-size: cover;
+  transition: all 0.2s ease;
+}
+
+.Slider_Item:hover {
+  border: 2px solid red;
+}
+
+@media (max-width: 768px) {
+  .Slider_Item {
+    height: 200px;
+  }
+}
+
+@media (max-width: 700px) {
+  .Slider_Item {
+    height: 180px;
+  }
+}
+
+@media (max-width: 600px) {
+  .Slider_Item {
+    height: 160px;
+  }
+}
+
+@media (max-width: 500px) {
+  .Slider_Item {
+    height: 130px;
+  }
+}
+
+@media (max-width: 500px) {
+  .Slider_Item {
+    height: 100px;
+  }
+}

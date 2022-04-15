@@ -1,0 +1,63 @@
+/* Setting up the responsive Grid container - auto-fit + minmax() */
+.albums {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  margin-top: 2em;
+  width: 200px;
+  height: 100px;
+  margin-bottom: 2rem;
+}
+/* Grid inside grid - album cards also use grid for layout setup */
+.album {
+  background: rgba(165, 103, 103, 0);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  color: white;
+  font-weight: 100;
+}
+.album__details {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  text-transform: uppercase;
+  margin-left: 10px;
+  width: 150px;
+}
+.album__details h2 {
+  /* margin-top: -15px; */
+  font-size: 15px;
+  overflow-y: hidden;
+  height: 30px;
+}
+
+.album__desc {
+  height: 20px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  font-size: 10px;
+}
+.album__details__btn-container {
+  /* margin-bottom: -11px; */
+}
+
+.album img {
+  width: 115px;
+  height: 115px;
+}
+/* Important step - image will spill over the container if width is not declared explicitly */
+.album__artwork {
+  width: 100%;
+}
+
+/* Some additional text styling */
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.album__artist {
+  opacity: 0.7;
+  text-transform: lowercase;
+}

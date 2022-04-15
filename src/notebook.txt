@@ -1,0 +1,16 @@
+ {data.map((messages: any) => (
+        <div
+          style={
+            email === messages.email
+              ? { display: "flex", width: "100vw", justifyContent: "flex-end" }
+              : { display: "flex" }
+          }
+        >
+          <li>{messages.text}</li>
+          {email === messages.email ? (
+            <button onClick={() => handleDelete(messages.id)}>delete</button>
+          ) : (
+            ""
+          )}
+        </div>
+      ))}
