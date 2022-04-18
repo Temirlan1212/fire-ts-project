@@ -1,7 +1,11 @@
 import { Button } from "@mui/material";
+import { addDoc, collection } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../../../contexts/ProductContext";
+import fire from "../../../fire";
+import firebase from "firebase/compat/app";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const ProductDetails = () => {
   const {
@@ -17,81 +21,50 @@ const ProductDetails = () => {
     UpdateComment,
   } = useProducts();
 
-  const { id, comId } = useParams();
+  const {
+    user: { email },
+  } = useAuth();
 
-  let pattern = /([A-Z a-z])\w+/g;
-  let res: null | any = comId?.match(pattern);
-
-  useEffect(() => {
-    getOneProduct(id);
-  }, []);
-
-  useEffect(() => {
-    getOneProduct(id);
-  }, [id]);
-
-  const [product, setProduct] = useState("");
-
-  const getComment = (e: any) => {
-    setProduct(e.target.value);
-  };
-
-  const comPush = async () => {
-    let list2 = [...oneProduct[1].comments, product];
-
-    await UpdateComment(res[0], {
-      comments: list2,
-    });
-
-    setProduct("");
-  };
+  const [product, setProduct] = useState<any>();
+  const firestore = fire.firestore();
+  const { id } = useParams();
 
   useEffect(() => {
     getComments();
   }, []);
 
+  const getComment = (e: any) => {
+    setProduct(e.target.value);
+  };
+
+  async function sendComments() {
+    try {
+      await addDoc(collection(firestore, "comments"), {
+        email: email,
+        id: id,
+        comments: product,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        date: Date.now(),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    setProduct("");
+    getComments();
+  }
+
   return (
     <div>
       <input name="comments" onChange={getComment} value={product} />
 
-      <Button onClick={() => comPush()}>push</Button>
+      <Button onClick={() => sendComments()}>push</Button>
 
-      {comments.map((elem: any) => (
-        <ul>
-          {elem.id === res[0] ? (
-            <li>
-              {elem.comments.map((item: any) => (
-                <li>{item}</li>
-              ))}
-            </li>
-          ) : (
-            ""
-          )}
-        </ul>
-      ))}
+      {comments.map((com: any) => {
+        return id === com.id ? <li>{com.comments}</li> : "";
+      })}
     </div>
   );
 };
 
 export default ProductDetails;
-
-// comments.map((elem2: any) => (
-//     elem.comId == elem2.comId ? <li>sdfjsd</li> : "";
-//  ))
-
-{
-  /* <div>
-{oneProduct.map((elem: any) => (
-  <>
-    <li>{elem.name}</li>
-    <div>
-      {list[0] === elem.comId ? (
-        comments.map((item: any) => <div>{item.comId}</div>)
-      ) : (
-        <div>comments id didn"t the same</div>
-      )}
-    </div>
-  </>
-))}
-</div> */
-}

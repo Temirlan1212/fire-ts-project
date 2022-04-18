@@ -50,7 +50,7 @@ const MainRoutes = () => {
       id: 6,
     },
     {
-      link: "/list/:id/:comId",
+      link: "/list/:id",
       element: <ProductDetails />,
       id: 7,
     },

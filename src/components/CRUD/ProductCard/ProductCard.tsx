@@ -160,12 +160,8 @@ const ProductCard = () => {
                       "&:hover": { color: "red" },
                     }}
                     onClick={() => {
-                      getOneProduct(data.id);
-                      navigate(
-                        `/list/${data.comId}/${comments.map((com: any) => {
-                          return com.comId === data.comId ? com.id : null;
-                        })}`
-                      );
+                      getOneProduct(data.comId);
+                      navigate(`/list/${data.id}`);
                     }}
                   >
                     see the comments

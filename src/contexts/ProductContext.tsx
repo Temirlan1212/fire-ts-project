@@ -120,7 +120,7 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
         type: product.type,
         price: product.price,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        comId: product.commnetsId,
+        comId: Date.now(),
       });
     } catch (error) {
       console.log(error);
@@ -226,23 +226,23 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
       list.push(doc.data());
     });
 
-    const citiesRef2 = firestore.collection("comments");
-    const snapshot2 = await citiesRef2.where("comId", "==", id).get();
+    // const citiesRef2 = firestore.collection("comments");
+    // const snapshot2 = await citiesRef2.where("comId", "==", id).get();
 
-    if (snapshot2.empty) {
-      console.log("No matching documents.");
-      return;
-    }
+    // if (snapshot2.empty) {
+    //   console.log("No matching documents.");
+    //   return;
+    // }
 
-    snapshot2.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
-      list.push(doc.data());
-    });
+    // snapshot2.forEach((doc) => {
+    //   console.log(doc.id, "=>", doc.data());
+    //   list.push(doc.data());
+    // });
 
-    dispatch({
-      type: ACTIONS.GET_ONE_PRODUCT,
-      payload: list,
-    });
+    // dispatch({
+    //   type: ACTIONS.GET_ONE_PRODUCT,
+    //   payload: list,
+    // });
   };
 
   //! CRUD ends

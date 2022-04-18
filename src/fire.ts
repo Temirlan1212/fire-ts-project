@@ -8,6 +8,7 @@ import "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyAkx9MPeDQCJYZTh1sXeXPRXGKrltRmCK8",
   authDomain: "auth-40ef8.firebaseapp.com",
+  databaseURL: "https://auth-40ef8-default-rtdb.firebaseio.com",
   projectId: "auth-40ef8",
   storageBucket: "auth-40ef8.appspot.com",
   messagingSenderId: "456599167506",
