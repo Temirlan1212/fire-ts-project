@@ -42,20 +42,46 @@ const Chat: React.FC<React.ReactNode> = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let list: any = [];
-      try {
-        const querySnapshot = await getDocs(collection(firestore, "messages"));
+      //   let list: any = [];
+      //   try {
+      //     const querySnapshot = await getDocs(collection(firestore, "messages"));
 
-        querySnapshot.forEach((doc) => {
-          list.push({ id: doc.id, ...doc.data() });
-        });
-        setData(list);
-      } catch (err) {
-        console.log(err);
+      //     querySnapshot.forEach((doc) => {
+      //       list.push({ id: doc.id, ...doc.data() });
+      //     });
+      //     setData(list);
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+
+      const citiesRef = firestore.collection("messages");
+      // const snapshot = await citiesRef.where("type", "==", "pizza40").get();
+
+      const snapshot = await citiesRef.orderBy("createdAt").get();
+
+      if (snapshot.empty) {
+        console.log("No matching documents.");
+        return;
       }
+      let list: any = [];
+
+      snapshot.forEach((doc) => {
+        console.log(doc.id, "=>", doc.data());
+        list.push(doc.data());
+      });
+
+      setData(list);
     };
     fetchData();
   }, [sendMessage]);
+
+  // const FilterByTimestamp = async () => {
+
+  //   dispatch({
+  //     type: ACTIONS.GET_DATA,
+  //     payload: list,
+  //   });
+  // };
 
   const handleDelete = async (id: any) => {
     try {

@@ -16,14 +16,15 @@ import { Box } from "@mui/system";
 const EditProduct = () => {
   const firestore = fire.firestore();
   const navigate = useNavigate();
-
-  const { UpdateFieldsInADocument, fetchData, setData } = useProducts();
-
   const { id } = useParams();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const {
+    UpdateFieldsInADocument,
+    fetchData,
+    getOneProduct,
+    data,
+    oneProduct,
+  } = useProducts();
 
   const [product, setProduct] = useState({
     name: "",
@@ -32,24 +33,20 @@ const EditProduct = () => {
     type: "",
   });
 
-  console.log(product);
+  useEffect(() => {
+    getOneProduct(id);
+  }, []);
 
-  const handleInp = (e: any) => {
-    if (e.target.name === "price") {
-      let obj = {
-        ...product,
-        [e.target.name]: Number(e.target.value),
-      };
+  useEffect(() => {
+    setProduct(oneProduct);
+  }, [oneProduct]);
 
-      setProduct(obj);
-    } else {
-      let obj = {
-        ...product,
-        [e.target.name]: e.target.value,
-      };
-
-      setProduct(obj);
-    }
+  const handleInput = (e: any, product: any, setProduct: any) => {
+    let obj = {
+      ...product,
+      [e.target.name]: e.target.value,
+    };
+    setProduct(obj);
   };
 
   return (
@@ -69,36 +66,52 @@ const EditProduct = () => {
         >
           <form>
             <TextField
+              // value={data.map((elem: any) => {
+              //   return elem.id === id ? elem.name : "";
+              // })}
+              value={product.name}
               fullWidth
               id="outlined-basic"
               label="NAME"
               variant="outlined"
               name="name"
-              onChange={handleInp}
+              onChange={(e) => handleInput(e, product, setProduct)}
             />
             <TextField
+              // value={data.map((elem: any) => {
+              //   return elem.id === id ? elem.description : "";
+              // })}
+              value={product.description}
               fullWidth
               id="outlined-basic"
               label="DESCRIPTION"
               variant="outlined"
               name="description"
-              onChange={handleInp}
+              onChange={(e) => handleInput(e, product, setProduct)}
             />{" "}
             <TextField
+              // value={data.map((elem: any) => {
+              //   return elem.id === id ? elem.picture : "";
+              // })}
+              value={product.picture}
               fullWidth
               id="outlined-basic"
               label="picture"
               variant="outlined"
               name="picture"
-              onChange={handleInp}
+              onChange={(e) => handleInput(e, product, setProduct)}
             />{" "}
             <TextField
+              // value={data.map((elem: any) => {
+              //   return elem.id === id ? elem.type : "";
+              // })}
+              value={product.type}
               fullWidth
               id="outlined-basic"
               label="type"
               variant="outlined"
               name="type"
-              onChange={handleInp}
+              onChange={(e) => handleInput(e, product, setProduct)}
             />
             <Stack direction="row" spacing={2} sx={{ bgcolor: "#000" }}>
               <Link to="/">

@@ -1,67 +1,74 @@
 import { Button } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../../../contexts/ProductContext";
 
 const ProductDetails = () => {
-  const { id } = useParams();
-
-  console.log(id);
   const {
-    getOneProduct,
     data,
-    comments,
-    getComments,
-    oneProduct,
     setComment,
     comment,
     sendComment,
+    fetchData,
+    getOneProduct,
+    comments,
+    getComments,
+    oneProduct,
+    UpdateComment,
   } = useProducts();
+
+  const { id, comId } = useParams();
+
+  let pattern = /([A-Z a-z])\w+/g;
+  let res: null | any = comId?.match(pattern);
 
   useEffect(() => {
     getOneProduct(id);
-  }, []);
-
-  useEffect(() => {
-    getComments();
   }, []);
 
   useEffect(() => {
     getOneProduct(id);
   }, [id]);
 
-  let list: any = [];
-  const getCom = () => {
-    oneProduct.map((elem: any) => {
-      return list.push(elem.comId);
-    });
-  };
-  getCom();
-
-  console.log(comment);
+  const [product, setProduct] = useState("");
 
   const getComment = (e: any) => {
-    setComment(e.target.value);
+    setProduct(e.target.value);
   };
+
+  const comPush = async () => {
+    let list2 = [...oneProduct[1].comments, product];
+
+    await UpdateComment(res[0], {
+      comments: list2,
+    });
+
+    setProduct("");
+  };
+
+  useEffect(() => {
+    getComments();
+  }, []);
 
   return (
     <div>
-      {/* <input onChange={getComment} />
-      <Button onClick={() => sendComment()}>sent</Button> */}
-      <div>
-        {oneProduct.map((elem: any) => (
-          <>
-            <li>{elem.name}</li>
+      <input name="comments" onChange={getComment} value={product} />
+
+      <Button onClick={() => comPush()}>push</Button>
+
+      {comments.map((elem: any) => (
+        <ul>
+          {elem.id === res[0] ? (
             <li>
-              {/* {comments.map((item: any) => (
-                <div>
-                  {elem.comId === item.comId ? <div>{item.comments}</div> : ""}
-                </div>
-              ))} */}
+              {elem.comments.map((item: any) => (
+                <li>{item}</li>
+              ))}
             </li>
-          </>
-        ))}
-      </div>
+          ) : (
+            ""
+          )}
+        </ul>
+      ))}
     </div>
   );
 };

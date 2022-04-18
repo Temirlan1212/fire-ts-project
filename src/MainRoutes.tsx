@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import Cart from "./components/Cart/Cart";
 import Chat from "./components/Chat/Chat/Chat";
 import SighIn from "./components/Chat/SighIn";
 import EditProduct from "./components/CRUD/EditProduct/EditProduct";
@@ -49,9 +50,14 @@ const MainRoutes = () => {
       id: 6,
     },
     {
-      link: "/list/:id",
+      link: "/list/:id/:comId",
       element: <ProductDetails />,
       id: 7,
+    },
+    {
+      link: "/cart",
+      element: <Cart />,
+      id: 8,
     },
   ];
 

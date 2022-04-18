@@ -1,0 +1,132 @@
+.main-admin__container {
+  background-color: black;
+}
+
+.container11 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 50px;
+  align-items: center;
+}
+.c1 {
+  width: 300px;
+  height: 500px;
+  display: inline-block;
+  border-radius: 15px 15px 15px 15px;
+}
+
+.c11 {
+  background-image: url("https://i.pinimg.com/736x/b8/09/22/b80922f6ea2daaf36a6627378662803b--deck-of-cards-phone-wallpapers.jpg");
+  background-size: 300px 400px;
+  background-repeat: no-repeat;
+  background-color: white;
+  width: 300px;
+  height: 400px;
+  display: inline-block;
+  position: absolute;
+  z-index: 4;
+  border-radius: 15px 15px 200px 200px;
+}
+#left,
+#right {
+  display: inline-block;
+  width: 146px;
+  height: 500px;
+  cursor: pointer;
+}
+#left {
+  border-radius: 15px 0px 0px 15px;
+}
+#right {
+  border-radius: 15px 15px 15px 0px;
+}
+.left_hover {
+  color: #ee9ba3;
+  box-shadow: 5px 0 18px -10px #333;
+  z-index: 1;
+  position: absolute;
+}
+.right_hover {
+  box-shadow: -5px 0 15px -10px #333;
+  z-index: 1;
+  position: absolute;
+}
+.s1class {
+  color: #748194;
+  position: absolute;
+  bottom: 0;
+  left: 63%;
+  margin-left: -50%;
+}
+.s1class span,
+.s2class span {
+  display: block;
+}
+.su {
+  font-size: 20px;
+}
+
+.mainhead {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 50px;
+}
+.mainp {
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+}
+.c2 {
+  width: 300px;
+  height: 500px;
+  border-radius: 15px;
+  left: 370px;
+  margin-top: 100px;
+}
+.username {
+  font-weight: bold;
+  width: 200px;
+  margin: 0 35px 20px;
+  height: 35px;
+  padding: 6px 15px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  background: #f6f7f9;
+  color: #748194;
+  font-size: 14px;
+}
+.btn {
+  font-weight: bold;
+  width: 230px;
+  margin: 0 35px 20px;
+  height: 45px;
+  padding: 6px 15px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  background: #ee9ba3;
+  color: white;
+  font-size: 14px;
+}
+.signup1 {
+  color: #748194;
+  font-size: 30px;
+  text-align: center;
+}
+a {
+  text-decoration: none;
+}
+.signup2 {
+  color: #748194;
+  font-size: 20px;
+  text-align: center;
+}
+.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

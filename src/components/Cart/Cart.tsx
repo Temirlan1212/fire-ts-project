@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useProducts } from "../../contexts/ProductContext";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import "./Cart.css";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const { cart, deleteCartProducts, getCart, fetchData, changeProductCount } =
+    useProducts();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleCountChange = (count: any, id: any) => {
+    if (count <= 0 || count >= 1000) {
+      count = 1;
+      changeProductCount(count, id);
+    } else {
+      changeProductCount(count, id);
+    }
+  };
+
   return (
     <div>
       <div className="app">
@@ -18,14 +42,48 @@ const Cart = () => {
                 alt=""
               /> */}
             </div>
-            <div className="item-info">
-              <h3 className="item-title">Product Name</h3>
-              <p className="price-amount">$12.99</p>
-            </div>
+            {cart.products.map((cart: any) => (
+              <div className="item-info">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "6px",
+                  }}
+                >
+                  <input
+                    className="username"
+                    style={{
+                      margin: "0",
+                      width: "70px",
+                      height: "20px",
+                      backgroundColor: "black",
+                      border: "1px solid grey",
+                    }}
+                    type="number"
+                    min={1}
+                    max={1000}
+                    value={cart.count}
+                    onChange={(e) =>
+                      handleCountChange(e.target.value, cart.item.id)
+                    }
+                  />
+                  <h3 className="item-title">{cart.item.name}</h3>
+                </div>
+                <DeleteOutlineIcon
+                  onClick={() => {
+                    deleteCartProducts(cart.item.id);
+                  }}
+                  className="cart-item__btn"
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className="navigate">
-          <button className="button button-pay">Pay</button>
+          <button className="button button-pay">
+            Total price: {cart.totalPrice}
+          </button>
         </div>
       </div>
     </div>

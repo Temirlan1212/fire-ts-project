@@ -18,10 +18,16 @@ import {
   getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
 } from "firebase/firestore";
 import fire from "../fire";
 import { useAuth } from "./AuthContext";
+import {
+  calcSubPrice,
+  calcTotalPrice,
+  getCountProductsInCart,
+} from "../helpers/functions";
 
 export const productContext = createContext<any>(null);
 
@@ -36,12 +42,19 @@ interface MessageState {
   messages: any[];
   comments: any[];
   oneProduct: any[];
+  oneComment: any[];
+  cart: any;
+  cartLength: any;
 }
 const INIT_STATE: MessageState = {
   data: [],
   messages: [],
   comments: [],
   oneProduct: [],
+  oneComment: [],
+
+  cart: JSON.parse(localStorage.getItem("cart") || ""),
+  cartLength: getCountProductsInCart,
 };
 
 const reducer = (state: any = INIT_STATE, action: any) => {
@@ -54,6 +67,10 @@ const reducer = (state: any = INIT_STATE, action: any) => {
       return { ...state, oneProduct: action.payload };
     case ACTIONS.GET_COMMENTS:
       return { ...state, comments: action.payload };
+    case ACTIONS.GET_ONE_COMMENT:
+      return { ...state, comments: action.payload };
+    case ACTIONS.GET_CART:
+      return { ...state, cart: action.payload };
   }
 };
 
@@ -61,15 +78,15 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   const firestore = fire.firestore();
   const [state, dispatch] = useReducer(reducer, INIT_STATE);
   const [msg, setMsg] = useState("");
-  const [comment, setComment] = useState<any>();
 
   const [product, setProduct] = useState({
     name: "",
     description: "",
     picture: "",
     type: "",
-    id2: Date.now(),
+    price: 0,
     comments: "",
+    commnetsId: "",
   });
 
   const {
@@ -97,28 +114,27 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   async function sendProducts() {
     try {
       await addDoc(collection(firestore, "products"), {
-        id2: Date.now(),
         name: product.name,
         description: product.description,
         picture: product.picture,
         type: product.type,
+        price: product.price,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        // comId: product.id2,
-        comments: [],
+        comId: product.commnetsId,
       });
     } catch (error) {
       console.log(error);
     }
 
-    // try {
-    //   await addDoc(collection(firestore, "comments"), {
-    //     comId: product.id2,
-    //     comments: comment,
-    //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await addDoc(collection(firestore, "comments"), {
+        comId: product.commnetsId,
+        comments: [],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //? get start
@@ -142,7 +158,6 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
 
   const getComments = async () => {
     let list: any = [];
-
     try {
       const querySnapshot = await getDocs(collection(firestore, "comments"));
 
@@ -185,9 +200,9 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   }
 
   async function UpdateComment(id: any, updates: any) {
-    await firestore.collection("products").doc(id).update(updates);
+    await firestore.collection("comments").doc(id).update(updates);
 
-    const doc = await firestore.collection("products").doc(id).get();
+    const doc = await firestore.collection("comments").doc(id).get();
 
     const product = {
       id: doc.id,
@@ -198,7 +213,45 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
 
   const getOneProduct = async (id: any) => {
     const citiesRef = firestore.collection("products");
-    const snapshot = await citiesRef.where("id2", "==", id).get();
+    const snapshot = await citiesRef.where("comId", "==", id).get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+
+    const citiesRef2 = firestore.collection("comments");
+    const snapshot2 = await citiesRef2.where("comId", "==", id).get();
+
+    if (snapshot2.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+
+    snapshot2.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+
+    dispatch({
+      type: ACTIONS.GET_ONE_PRODUCT,
+      payload: list,
+    });
+  };
+
+  //! CRUD ends
+
+  //! filter start
+
+  const FilterPizza30sm = async () => {
+    const citiesRef = firestore.collection("products");
+    const snapshot = await citiesRef.where("type", "==", "pizza30").get();
 
     if (snapshot.empty) {
       console.log("No matching documents.");
@@ -211,18 +264,138 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
       list.push(doc.data());
     });
     dispatch({
-      type: ACTIONS.GET_ONE_PRODUCT,
+      type: ACTIONS.GET_DATA,
       payload: list,
     });
   };
 
-  //! CRUD ends
-
-  //! filter start
-
-  const FilterProducts2 = async () => {
+  const FilterPizza40sm = async () => {
     const citiesRef = firestore.collection("products");
-    const snapshot = await citiesRef.where("type", "==", "role").get();
+    const snapshot = await citiesRef.where("type", "==", "pizza40").get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+    dispatch({
+      type: ACTIONS.GET_DATA,
+      payload: list,
+    });
+  };
+
+  const FilterColdDrinks = async () => {
+    const citiesRef = firestore.collection("products");
+    const snapshot = await citiesRef.where("type", "==", "cold-drinks").get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+    dispatch({
+      type: ACTIONS.GET_DATA,
+      payload: list,
+    });
+  };
+
+  const FilterBreakfast = async () => {
+    const citiesRef = firestore.collection("products");
+    const snapshot = await citiesRef.where("type", "==", "breakfast").get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+    dispatch({
+      type: ACTIONS.GET_DATA,
+      payload: list,
+    });
+  };
+
+  const FilterBySalad = async () => {
+    const citiesRef = firestore.collection("products");
+    const snapshot = await citiesRef.where("type", "==", "salad").get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+    dispatch({
+      type: ACTIONS.GET_DATA,
+      payload: list,
+    });
+  };
+
+  const FilterByTimestamp = async () => {
+    const citiesRef = firestore.collection("products");
+    // const snapshot = await citiesRef.where("type", "==", "pizza40").get();
+
+    const snapshot = await citiesRef.orderBy("createdAt").get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.unshift(doc.data());
+    });
+    dispatch({
+      type: ACTIONS.GET_DATA,
+      payload: list,
+    });
+  };
+
+  const filterCheapPizza = async () => {
+    const citiesRef = firestore.collection("products");
+    // const snapshot = await citiesRef.where("type", "==", "role").get();
+    const snapshot = await citiesRef.where("price", "<", 1000).get();
+
+    if (snapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    let list: any = [];
+
+    snapshot.forEach((doc) => {
+      console.log(doc.id, "=>", doc.data());
+      list.push(doc.data());
+    });
+    dispatch({
+      type: ACTIONS.GET_DATA,
+      payload: list,
+    });
+  };
+
+  const filterExpensivePizza = async () => {
+    const citiesRef = firestore.collection("products");
+    // const snapshot = await citiesRef.where("type", "==", "role").get();
+    const snapshot = await citiesRef.where("price", ">", 1000).get();
 
     if (snapshot.empty) {
       console.log("No matching documents.");
@@ -241,11 +414,122 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
   };
   //! filter ends
 
+  // ////////////////////////////////////! cart start
+
+  const getCart = () => {
+    let cart = JSON.parse(localStorage.getItem("cart") || "");
+
+    if (!cart) {
+      localStorage.setItem(
+        "cart",
+        JSON.stringify({
+          products: [],
+          totalPrice: 0,
+        })
+      );
+      cart = {
+        products: [],
+        totalPrice: 0,
+      };
+    }
+    dispatch({
+      type: ACTIONS.GET_CART,
+      payload: cart,
+    });
+  };
+
+  const addProductToCart = (product: any) => {
+    let cart = JSON.parse(localStorage.getItem("cart") || "");
+
+    if (!cart) {
+      cart = {
+        products: [],
+        totalPrice: 0,
+      };
+    }
+
+    let newProduct = {
+      item: product,
+      count: 1,
+      subPrice: +product.price,
+    };
+
+    let productToFind = cart.products.filter(
+      (item: any) => item.item.id === product.id
+    );
+
+    if (productToFind.length === 0) {
+      cart.products.push(newProduct);
+    } else {
+      cart.products = cart.filter((item: any) => item.ite.id !== product.id);
+    }
+
+    cart.totalPrice = calcTotalPrice(cart.products);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    dispatch({
+      type: ACTIONS.GET_CART,
+      payload: cart,
+    });
+  };
+
+  const changeProductCount = (count: any, id: any) => {
+    let cart = JSON.parse(localStorage.getItem("cart") || "");
+
+    cart.products = cart.products.map((product: any) => {
+      if (product.item.id === id) {
+        product.count = count;
+        product.subPrice = calcSubPrice(product);
+      }
+      return product;
+    });
+    cart.totalPrice = calcTotalPrice(cart.products);
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    dispatch({
+      type: ACTIONS.GET_CART,
+      payload: cart,
+    });
+  };
+
+  function deleteCartProducts(id: any) {
+    let cart = JSON.parse(localStorage.getItem("cart") || "");
+    cart.products = cart.products.filter((elem: any) => elem.item.id !== id);
+
+    cart.totalPrice = calcTotalPrice(cart.products);
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    getCart();
+
+    dispatch({
+      type: ACTIONS.CHANGE_CART_LENGTH,
+      payload: cart.products.length,
+    });
+  }
+
+  function checkProductInCart(id: any) {
+    let cart = JSON.parse(localStorage.getItem("cart") || "");
+
+    if (cart) {
+      let newCart = cart.products.filter((elem: any) => elem.item.id == id);
+
+      return newCart.length > 0 ? true : false;
+    } else {
+      cart = {
+        product: [],
+        totalPrice: 0,
+      };
+    }
+  }
+  console.log(state.productDetails);
+
+  ////////////////////////////////////! cart end
+
   console.log(state.comments);
 
   const values = {
     getOneProduct,
-    FilterProducts2,
     sendProducts,
     product,
     setProduct,
@@ -256,8 +540,8 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     sendMessage,
     setMsg,
 
-    comment,
-    setComment,
+    oneComment: state.oneComment,
+    UpdateComment,
 
     data: state.data,
     comments: state.comments,
@@ -265,6 +549,22 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     msg,
 
     UpdateFieldsInADocument,
+
+    FilterByTimestamp,
+    filterCheapPizza,
+    filterExpensivePizza,
+    FilterPizza40sm,
+    FilterPizza30sm,
+    FilterColdDrinks,
+    FilterBreakfast,
+    FilterBySalad,
+
+    getCart,
+    addProductToCart,
+    changeProductCount,
+    deleteCartProducts,
+    checkProductInCart,
+    cart: state.cart,
   };
   return (
     <productContext.Provider value={values}>{children}</productContext.Provider>

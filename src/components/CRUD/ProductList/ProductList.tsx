@@ -20,13 +20,18 @@ const ProductList: React.FC<React.ReactNode> = () => {
   const { setId, data, FilterProducts, handleDelete, sendProducts } =
     useProducts();
 
+  console.log(data);
+
   return (
     <div
       style={{
         width: "1030px",
         display: "flex",
         margin: "0 auto",
+        minHeight: "50vh",
         justifyContent: "space-between",
+        marginTop: "20px",
+        // flexWrap: "wrap",
       }}
     >
       <ProductCard />

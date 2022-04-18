@@ -7,7 +7,13 @@ import { useAuth } from "../contexts/AuthContext";
 
 const HomePage = () => {
   return (
-    <div style={{ height: "2000px", backgroundColor: "black" }}>
+    <div
+      style={{
+        backgroundColor: "black",
+        // background:
+        //   "linear-gradient(180deg, rgba(0,0,0,1) 60%, rgba(0,0,0,1) 60%, rgba(255,255,255,0) 30%, rgba(34,0,0,30) 100%)",
+      }}
+    >
       <Navbar />
 
       <Slider2 />

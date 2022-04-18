@@ -15,9 +15,12 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { ADMIN } from "../../helpers/consts";
+import { Button } from "@mui/material";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import { useProducts } from "../../contexts/ProductContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,6 +67,9 @@ export default function Navbar() {
     handleLogout,
     user: { email },
   } = useAuth();
+
+  const { cart } = useProducts();
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -193,8 +199,9 @@ export default function Navbar() {
         sx={{
           paddingTop: "50px",
           boxShadow: "none",
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 70%, rgba(255,255,255,0) 90%, rgba(255,255,255,0) 100%)",
+          backgroundColor: "black",
+          // background:
+          //   "linear-gradient(180deg, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 70%, rgba(255,255,255,0) 90%, rgba(255,255,255,0) 100%)",
         }}
       >
         <Toolbar>
@@ -207,8 +214,14 @@ export default function Navbar() {
               "&:hover": { color: "red" },
             }}
           >
-            Makers
-            <br /> Ням-Ням
+            <img
+              src="https://makers.courses/static/media/logo.0abbd97a.svg"
+              style={{
+                backgroundColor: "white",
+                padding: "5px",
+                width: "100px",
+              }}
+            />
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -255,24 +268,19 @@ export default function Navbar() {
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Link to="/cart">
+              <Button>
+                <IconButton>
+                  <Badge
+                    sx={{ color: "white" }}
+                    color="error"
+                    badgeContent={cart?.products ? cart.products.length : 0}
+                  >
+                    <BookmarkBorderIcon />
+                  </Badge>
+                </IconButton>
+              </Button>
+            </Link>
             <IconButton
               size="large"
               edge="end"
