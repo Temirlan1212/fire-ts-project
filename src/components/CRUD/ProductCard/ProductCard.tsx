@@ -29,7 +29,7 @@ const ProductCard = () => {
     data,
     FilterProducts,
     handleDelete,
-    UpdateFieldsInADocument,
+    // UpdateFieldsInADocument,
     sendProducts,
     fetchData,
     getOneProduct,

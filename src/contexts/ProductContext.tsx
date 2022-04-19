@@ -119,6 +119,7 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
         picture: product.picture,
         type: product.type,
         price: product.price,
+        likes: 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         comId: Date.now(),
       });
@@ -126,15 +127,15 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
       console.log(error);
     }
 
-    try {
-      await addDoc(collection(firestore, "comments"), {
-        comId: product.commnetsId,
-        comments: [],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   await addDoc(collection(firestore, "likes"), {
+    //     id: one_id,
+    //     likes: 0,
+    //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    //   });
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   //? get start

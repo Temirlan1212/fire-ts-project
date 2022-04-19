@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Cart from "./components/Cart/Cart";
 import Chat from "./components/Chat/Chat/Chat";
-import SighIn from "./components/Chat/SighIn";
 import EditProduct from "./components/CRUD/EditProduct/EditProduct";
 import ProductDetails from "./components/CRUD/ProductDetails/ProductDetails";
 import { useAuth } from "./contexts/AuthContext";
@@ -32,11 +31,6 @@ const MainRoutes = () => {
       link: "/chat",
       element: <Chat />,
       id: 3,
-    },
-    {
-      link: "/sign",
-      element: <SighIn />,
-      id: 4,
     },
 
     {

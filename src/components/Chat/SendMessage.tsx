@@ -31,6 +31,7 @@ const SendMessage: React.FC<React.ReactNode> = () => {
           placeholder="Message..."
           onChange={(e) => setMsg(e.target.value)}
         />
+
         <Button
           onClick={sendMessage}
           style={{

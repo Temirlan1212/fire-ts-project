@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 // import { db } from "../fire";
-
-import SignOut from "../SignOut";
 import fire from "../../../fire";
 import SendMessage from "../SendMessage";
 import "./Chat.css";
@@ -74,14 +72,6 @@ const Chat: React.FC<React.ReactNode> = () => {
     };
     fetchData();
   }, [sendMessage]);
-
-  // const FilterByTimestamp = async () => {
-
-  //   dispatch({
-  //     type: ACTIONS.GET_DATA,
-  //     payload: list,
-  //   });
-  // };
 
   const handleDelete = async (id: any) => {
     try {
@@ -192,46 +182,6 @@ const Chat: React.FC<React.ReactNode> = () => {
 
         <div ref={scroll}></div>
       </div>
-
-      {/* <div className="main-container">
-        <div className="head-container">
-          <h1>• Mark Zuckerberg</h1>
-          <a href="#" className="btn">
-            <img
-              src="https://svgshare.com/i/Knn.svg"
-              alt="close"
-              className="delete"
-            />
-          </a>
-        </div>
-
-        <div className="message-container">
-          <h3>
-            <span className="date">Today</span>
-          </h3>
-          <div className="sent">
-            <h5 className="hour">10:53</h5>
-            <p className="sent-bubble">{messages.text}</p>
-          </div>
-          <div className="received">
-            <h5 className="hour">10:57</h5>
-            <p className="received-bubble">
-              Yo! Send it to my assistant and we'll review it during the year.
-            </p>
-          </div>
-          <div className="sent">
-            <h5 className="hour">11:03</h5>
-            <p className="sent-bubble">But Mark...</p>
-          </div>
-        </div>
-
-        <div className="input-container">
-          <input type="text" placeholder="Enter your message" />
-          <a href="#" className="btn">
-            Send
-          </a>
-        </div>
-      </div> */}
     </div>
   );
 };

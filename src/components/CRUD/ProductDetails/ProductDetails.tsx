@@ -26,6 +26,7 @@ const ProductDetails = () => {
   } = useAuth();
 
   const [product, setProduct] = useState<any>();
+  const [count, setCount] = useState<number>(0);
   const firestore = fire.firestore();
   const { id } = useParams();
 
@@ -54,6 +55,18 @@ const ProductDetails = () => {
     getComments();
   }
 
+  async function UpdateLikes(id: any, updates: any) {
+    await firestore.collection("likes").doc(id).update(updates);
+
+    const doc = await firestore.collection("likes").doc(id).get();
+
+    const product = {
+      id: doc.id,
+      ...doc.data(),
+    };
+    console.log(product);
+  }
+
   return (
     <div>
       <input name="comments" onChange={getComment} value={product} />
@@ -63,6 +76,19 @@ const ProductDetails = () => {
       {comments.map((com: any) => {
         return id === com.id ? <li>{com.comments}</li> : "";
       })}
+
+      <button
+        onClick={async () => {
+          setCount(count + 1);
+          await UpdateLikes(id, {
+            likes: count,
+          });
+        }}
+      >
+        increment
+      </button>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(count - 1)}>decrement </button>
     </div>
   );
 };
