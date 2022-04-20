@@ -4,6 +4,8 @@ import Cart from "./components/Cart/Cart";
 import Chat from "./components/Chat/Chat/Chat";
 import EditProduct from "./components/CRUD/EditProduct/EditProduct";
 import ProductDetails from "./components/CRUD/ProductDetails/ProductDetails";
+import Set from "./components/CRUD/Set/Set";
+import RealTime from "./components/RealTime/RealTime";
 import { useAuth } from "./contexts/AuthContext";
 import { ADMIN } from "./helpers/consts";
 import AdminPage from "./pages/AdminPage";
@@ -32,7 +34,11 @@ const MainRoutes = () => {
       element: <Chat />,
       id: 3,
     },
-
+    {
+      link: "/realtime",
+      element: <RealTime />,
+      id: 4,
+    },
     {
       link: "/list",
       element: <ProductListPage />,
@@ -52,6 +58,12 @@ const MainRoutes = () => {
       link: "/cart",
       element: <Cart />,
       id: 8,
+    },
+
+    {
+      link: "/set",
+      element: <Set />,
+      id: 9,
     },
   ];
 

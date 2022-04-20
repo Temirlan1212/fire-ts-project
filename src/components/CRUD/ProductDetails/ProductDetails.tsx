@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useProducts } from "../../../contexts/ProductContext";
@@ -19,7 +19,12 @@ const ProductDetails = () => {
     getComments,
     oneProduct,
     UpdateComment,
+    getLikes,
+    UpdateFieldsInADocument,
+    likes,
   } = useProducts();
+
+  const [countOfLikes, setCountOfLikes] = useState<any>([]);
 
   const {
     user: { email },
@@ -33,10 +38,25 @@ const ProductDetails = () => {
   useEffect(() => {
     getComments();
   }, []);
-
-  const getComment = (e: any) => {
-    setProduct(e.target.value);
+  const runCallback = (cb: any) => {
+    return cb();
   };
+  useEffect(() => {
+    fetchData();
+    setCount(
+      runCallback(() => {
+        for (let i = 0; i < data.length; i++) {
+          return data[i].id === id
+            ? data[i].likes
+            : console.log("ids doesnt match");
+        }
+      })
+    );
+  }, []);
+
+  function getComment(e: any) {
+    setProduct(e.target.value);
+  }
 
   async function sendComments() {
     try {
@@ -50,21 +70,87 @@ const ProductDetails = () => {
     } catch (error) {
       console.log(error);
     }
-
     setProduct("");
     getComments();
   }
 
-  async function UpdateLikes(id: any, updates: any) {
-    await firestore.collection("likes").doc(id).update(updates);
+  // async function UpdateLikes(id: any, updates: any) {
+  //   await firestore.collection("likes").doc(id).update(updates);
 
-    const doc = await firestore.collection("likes").doc(id).get();
+  //   const doc = await firestore.collection("likes").doc(id).get();
 
-    const product = {
-      id: doc.id,
-      ...doc.data(),
+  //   const product = {
+  //     id: doc.id,
+  //     ...doc.data(),
+  //   };
+  // }
+  //   console.log(product);
+
+  //   // let likes = firestore.collection("likes").doc(id);
+
+  //   // likes.update({
+  //   //   likes: firebase.firestore.FieldValue.increment(8),
+  //   // });
+
+  //   getLikes();
+  // }
+
+  useEffect(() => {
+    try {
+      addDoc(collection(firestore, "countOflikes"), {
+        _id: id,
+        email: email,
+        count: 0,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  async function sendProducts() {
+    try {
+      await addDoc(collection(firestore, "countOflikes"), {
+        _id: id,
+        email: email,
+        count: 0,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    const fetchData = async () => {
+      let list: any = [];
+      try {
+        const querySnapshot = await getDocs(
+          collection(firestore, "countOflikes")
+        );
+
+        querySnapshot.forEach((doc) => {
+          list.push({ id: doc.id, ...doc.data() });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      setCountOfLikes(list);
     };
-    console.log(product);
+    fetchData();
+
+    async function UpdateLikes(id: any, updates: any) {
+      console.log(id, updates);
+      await firestore.collection("countOflikes").doc(id).update(updates);
+
+      const doc = await firestore.collection("count").doc(id).get();
+
+      const product = {
+        id: doc.id,
+        ...doc.data(),
+      };
+    }
+    countOfLikes?.map((elem: any) => {
+      UpdateLikes(elem.id, {
+        count: 1,
+      });
+    });
   }
 
   return (
@@ -77,18 +163,48 @@ const ProductDetails = () => {
         return id === com.id ? <li>{com.comments}</li> : "";
       })}
 
-      <button
+      {data.map((data: any) => {
+        return data.id === id ? (
+          <button
+            onClick={async () => {
+              setCount(
+                data.email === email && data.likes === 0
+                  ? data.likes + 1
+                  : data.likes - 1
+              );
+              await UpdateFieldsInADocument(id, {
+                likes: count,
+              });
+              await sendProducts();
+            }}
+          >
+            increment
+          </button>
+        ) : (
+          ""
+        );
+      })}
+
+      {/* <button
         onClick={async () => {
-          setCount(count + 1);
-          await UpdateLikes(id, {
+          setCount(
+            runCallback(() => {
+              for (var i = 0; i < data.length; i++) {
+                return data[i].likes;
+              }
+            }) - 1
+          );
+          await UpdateFieldsInADocument(data[0].id, {
             likes: count,
           });
         }}
       >
-        increment
-      </button>
-      <h1>{count}</h1>
-      <button onClick={() => setCount(count - 1)}>decrement </button>
+        decrement{" "}
+      </button> */}
+
+      {data?.map((data: any) => {
+        return data.id === id ? <div>{data.likes}</div> : "";
+      })}
     </div>
   );
 };

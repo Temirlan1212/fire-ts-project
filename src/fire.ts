@@ -1,21 +1,20 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/app";
 import "firebase/compat/auth";
+import "firebase/compat/database";
 
 import "firebase/compat/firestore";
 import "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAkx9MPeDQCJYZTh1sXeXPRXGKrltRmCK8",
-  authDomain: "auth-40ef8.firebaseapp.com",
-  databaseURL: "https://auth-40ef8-default-rtdb.firebaseio.com",
-  projectId: "auth-40ef8",
-  storageBucket: "auth-40ef8.appspot.com",
-  messagingSenderId: "456599167506",
-  appId: "1:456599167506:web:ced2380f2f024f0db96ecb",
-  measurementId: "G-QGJ8DD4VND",
+  apiKey: "AIzaSyBIlqCoQFbQFpsRTMa_uYDVZrcq2jpPZ-M",
+  authDomain: "auth-2-d5d17.firebaseapp.com",
+  projectId: "auth-2-d5d17",
+  storageBucket: "auth-2-d5d17.appspot.com",
+  messagingSenderId: "207465770838",
+  appId: "1:207465770838:web:5d34e08e44c37f049c30f7",
+  measurementId: "G-C5JGKQGWSZ",
 };
-
 const fire = firebase.initializeApp(firebaseConfig);
 
 // const db = firebase.firestore();

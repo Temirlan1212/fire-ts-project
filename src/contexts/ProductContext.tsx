@@ -43,6 +43,7 @@ interface MessageState {
   comments: any[];
   oneProduct: any[];
   oneComment: any[];
+  likes: any[];
   cart: any;
   cartLength: any;
 }
@@ -50,6 +51,7 @@ const INIT_STATE: MessageState = {
   data: [],
   messages: [],
   comments: [],
+  likes: [],
   oneProduct: [],
   oneComment: [],
 
@@ -71,6 +73,8 @@ const reducer = (state: any = INIT_STATE, action: any) => {
       return { ...state, comments: action.payload };
     case ACTIONS.GET_CART:
       return { ...state, cart: action.payload };
+    case ACTIONS.GET_LIKES:
+      return { ...state, likes: action.payload };
   }
 };
 
@@ -122,6 +126,7 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
         likes: 0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         comId: Date.now(),
+        email: email,
       });
     } catch (error) {
       console.log(error);
@@ -174,6 +179,23 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     }
   };
 
+  const getLikes = async () => {
+    let list: any = [];
+    try {
+      const querySnapshot = await getDocs(collection(firestore, "likes"));
+
+      querySnapshot.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() });
+      });
+      dispatch({
+        type: ACTIONS.GET_LIKES,
+        payload: list,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   //? get ends
 
   const handleDelete = async (id: any) => {
@@ -198,6 +220,8 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
       ...doc.data(),
     };
     console.log(product);
+
+    fetchData();
   }
 
   async function UpdateComment(id: any, updates: any) {
@@ -548,6 +572,7 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     comments: state.comments,
     oneProduct: state.oneProduct,
     msg,
+    likes: state.likes,
 
     UpdateFieldsInADocument,
 
@@ -560,6 +585,7 @@ const ProductContextProvider: React.FC<React.ReactNode> = ({ children }) => {
     FilterBreakfast,
     FilterBySalad,
 
+    getLikes,
     getCart,
     addProductToCart,
     changeProductCount,
